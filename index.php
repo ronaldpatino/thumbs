@@ -56,7 +56,7 @@ if (!file_exists($image)) {
 }
 
 // generate the thumbnail
-require('../phpthumb/phpthumb.class.php');
+require('pt/phpthumb.class.php');
 $phpThumb = new phpThumb();
 $phpThumb->setSourceFilename($image);
 $phpThumb->setParameter('w',$width);
