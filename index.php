@@ -35,6 +35,7 @@ if (!$_GET['thumb']) {
     error('no thumb');
 }
 
+
 // get the thumbnail from the URL
 $thumb = strip_tags(htmlspecialchars($_GET['thumb']));
 
@@ -52,7 +53,8 @@ if (!in_array($size,$sizes)) {
 
 // ensure the image file exists
 if (!file_exists($image)) {
-    error('no source image');
+    $image = './placeholder.png';
+    $thumb = $size.'/placeholder/elmercurionoticiascuencaecuador.png';
 }
 
 // generate the thumbnail
@@ -62,7 +64,7 @@ $phpThumb->setSourceFilename($image);
 $phpThumb->setParameter('w',$width);
 $phpThumb->setParameter('h',$height);
 $phpThumb->setParameter('f',substr($thumb,-3,3)); // set the output format
-$phpThumb->setParameter('zc',1); // set the output format
+$phpThumb->setParameter('zc',"TL"); // set the output format
 
 //$phpThumb->setParameter('far','C'); // scale outside
 //$phpThumb->setParameter('bg','FFFFFF'); // scale outside
