@@ -30,7 +30,8 @@ $sizes = array(
     '120x74',
     '170x124',
     '685x340',
-    '310x350'
+    '310x350',
+    '625x300'
 );
 
 // ensure there was a thumb in the URL
