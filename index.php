@@ -72,8 +72,9 @@ $phpThumb->setSourceFilename($image);
 $phpThumb->setParameter('w',$width);
 $phpThumb->setParameter('h',$height);
 $phpThumb->setParameter('f',substr($thumb,-3,3)); // set the output format
-$phpThumb->setParameter('zc',"TL"); // set the output format
+$phpThumb->setParameter('iar',"1"); // set the output format
 
+//$phpThumb->setParameter('zc',"TL"); // set the output format
 //$phpThumb->setParameter('far','C'); // scale outside
 //$phpThumb->setParameter('bg','FFFFFF'); // scale outside
 if (!$phpThumb->GenerateThumbnail()) {
