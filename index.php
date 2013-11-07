@@ -86,7 +86,7 @@ if (!$phpThumb->RenderToFile($thumb)) {
 
 // redirect to the thumb
 // note: you need the '?new' or IE wont do a redirect
-header('Location: '.dirname($_SERVER['SCRIPT_NAME']).'/'.$thumb.'?new');
+header('Location: /wp-content/'.$thumb.'?new');
 
 // basic error handling
 function error($error) {
