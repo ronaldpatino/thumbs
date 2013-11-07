@@ -34,6 +34,10 @@ $sizes = array(
     '685x340'
 );
 
+$IMAGE_SUBDIR = '/mr/';
+$THUMBS_PATH = $IMAGE_SUBDIR . '/thumbs/';
+
+
 // ensure there was a thumb in the URL
 if (!$_GET['thumb']) {
     error('no thumb');
@@ -42,12 +46,11 @@ if (!$_GET['thumb']) {
 
 // get the thumbnail from the URL
 $thumb = strip_tags(htmlspecialchars($_GET['thumb']));
-
 // get the image and size
 $thumb_array = explode('/',$thumb);
 $size =$thumb_array[0];
 array_shift($thumb_array);
-$image = '../'.implode('/',$thumb_array);
+$image = $_SERVER['DOCUMENT_ROOT']. $IMAGE_SUBDIR .implode('/',$thumb_array);
 list($width,$height) = explode('x',$size);
 
 // ensure the size is valid
@@ -82,13 +85,14 @@ if (!mkpath(dirname($thumb),true)) {
 }
 
 // write the file
-if (!$phpThumb->RenderToFile($thumb)) {
+$thumb_fisico = $_SERVER['DOCUMENT_ROOT']. $THUMBS_PATH . $thumb;
+if (!$phpThumb->RenderToFile($thumb_fisico)) {
     error('cannot save thumbnail');
 }
 
 // redirect to the thumb
 // note: you need the '?new' or IE wont do a redirect
-header('Location: /thumbs/'.$thumb.'?new');
+header('Location: '. $IMAGE_SUBDIR . 'thumbs/'.$thumb.'?new');
 
 // basic error handling
 function error($error) {
