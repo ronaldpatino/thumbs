@@ -237,6 +237,8 @@ if (preg_match('# ([0-9]{2})/([0-9]{2})/([0-9]{2}) #', $ServerInfo['im_version']
 }
 $IMversionAge = time() - $IMreleaseDate;
 echo '<tr><th>ImageMagick version:</th><th colspan="2" style="background-color: ';
+echo 'orange';
+/*
 if ($ServerInfo['im_version']) {
     if ($IMversionAge < (86400 * 365 * 1)) {
         echo 'lime';
@@ -253,7 +255,7 @@ if ($ServerInfo['im_version']) {
     echo 'orange';
 } else {
     echo 'red';
-}
+}*/
 echo ';">';
 echo '<div style="color: navy; font-family: monospace;">'.htmlentities($phpThumb->config_imagemagick_path);
 echo ' <span style="cursor: help;" title="file_exists"                  >['.intval(                            @file_exists($phpThumb->config_imagemagick_path)).']</span> ';
