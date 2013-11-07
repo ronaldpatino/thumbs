@@ -129,7 +129,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
 } else {
 	// *nix: set absolute pathname to "convert", or leave as null if "convert" is in the path (location detected with `which`)
 	//$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/local/bin/convert';
-	$PHPTHUMB_CONFIG['imagemagick_path'] = null;
+	$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/bin/convert';
 }
 
 
