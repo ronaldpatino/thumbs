@@ -15,7 +15,7 @@
 // define allowed image sizes
 $sizes = array(
     '714x341',
-    '346x344',
+    '346x346',
     '280x164',
     '400x400',
     '390x255',
