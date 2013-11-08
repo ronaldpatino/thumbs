@@ -1,18 +1,5 @@
 <?php
-/**
- * Image Cache using phpThumb and Mod_Rewrite
- *
- * Copyright (c) 2012 Brett O'Donnell <brett@mrphp.com.au>
- * Source Code: https://github.com/cornernote/php-image-cache
- * Home Page: http://mrphp.com.au/blog/image-cache-using-phpthumb-and-modrewrite
- * License: GPLv3
- */
 
-/**
- * create and serve a thumbnail
- */
-
-// define allowed image sizes
 $sizes = array(
     '714x341',
     '346x344',
@@ -58,19 +45,9 @@ if (!file_exists($image)) {
 }
 
 // generate the thumbnail
-require('pt/phpthumb.class.php');
-$phpThumb = new phpThumb();
-$phpThumb->setSourceFilename($image);
-$phpThumb->setParameter('w',$width);
-$phpThumb->setParameter('h',$height);
-$phpThumb->setParameter('f',substr($thumb,-3,3)); // set the output format
-$phpThumb->setParameter('zc',"TL"); // set the output format
-
-//$phpThumb->setParameter('far','C'); // scale outside
-//$phpThumb->setParameter('bg','FFFFFF'); // scale outside
-if (!$phpThumb->GenerateThumbnail()) {
-    error('cannot generate thumbnail');
-}
+require('resize.php');
+$resizeObj = new resize($image);
+$resizeObj -> resizeImage($width, $height, 'crop');
 
 // make the directory to put the image
 if (!mkpath(dirname($thumb),true)) {
@@ -78,7 +55,7 @@ if (!mkpath(dirname($thumb),true)) {
 }
 
 // write the file
-if (!$phpThumb->RenderToFile($thumb)) {
+if (!$resizeObj -> saveImage($thumb, 100) ) {
     error('cannot save thumbnail');
 }
 
