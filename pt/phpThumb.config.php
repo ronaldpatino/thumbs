@@ -27,12 +27,12 @@ ob_end_clean();
 //$PHPTHUMB_CONFIG['document_root'] = 'c:\\webroot\\example.com\\www';
 //$PHPTHUMB_CONFIG['document_root'] = $_SERVER['DOCUMENT_ROOT'];
 //$PHPTHUMB_CONFIG['document_root'] = realpath((@$_SERVER['DOCUMENT_ROOT'] && file_exists(@$_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF'])) ? $_SERVER['DOCUMENT_ROOT'] : str_replace(dirname(@$_SERVER['PHP_SELF']), '', str_replace(DIRECTORY_SEPARATOR, '/', realpath('.'))));
-$PHPTHUMB_CONFIG['document_root'] = realpath((getenv('DOCUMENT_ROOT') && ereg('^'.preg_quote(realpath(getenv('DOCUMENT_ROOT'))), realpath(__FILE__))) ? getenv('DOCUMENT_ROOT') : str_replace(dirname(@$_SERVER['PHP_SELF']), '', str_replace(DIRECTORY_SEPARATOR, '/', dirname(__FILE__))));
+$PHPTHUMB_CONFIG['document_root'] = realpath((getenv('DOCUMENT_ROOT') && preg_match('#^'.preg_quote(realpath(getenv('DOCUMENT_ROOT'))).'#', realpath(__FILE__))) ? getenv('DOCUMENT_ROOT') : str_replace(dirname(@$_SERVER['PHP_SELF']), '', str_replace(DIRECTORY_SEPARATOR, '/', dirname(__FILE__))));
 
 // * Cache directory configuration (choose only one of these - leave the other lines commented-out):
 // Note: this directory must be writable (usually chmod 777 is neccesary) for caching to work.
 // If the directory is not writable no error will be generated but caching will be disabled.
-$PHPTHUMB_CONFIG['cache_directory'] = dirname(__FILE__).'/../../../autothumb/cache/';         // set the cache directory relative to the phpThumb() installation
+$PHPTHUMB_CONFIG['cache_directory'] = dirname(__FILE__).'/cache/';                            // set the cache directory relative to the phpThumb() installation
 //$PHPTHUMB_CONFIG['cache_directory'] = $PHPTHUMB_CONFIG['document_root'].'/phpthumb/cache/'; // set the cache directory to an absolute directory for all source images
 //$PHPTHUMB_CONFIG['cache_directory'] = './cache/';                                           // set the cache directory relative to the source image - must start with '.' (will not work to cache URL- or database-sourced images, please use an absolute directory name)
 //$PHPTHUMB_CONFIG['cache_directory'] = null;                                                 // disable thumbnail caching (not recommended)
@@ -42,25 +42,26 @@ $PHPTHUMB_CONFIG['cache_directory'] = dirname(__FILE__).'/../../../autothumb/cac
 //	$PHPTHUMB_CONFIG['cache_directory'] = '/tmp/persistent/phpthumb/cache/';
 //}
 
-$PHPTHUMB_CONFIG['cache_disable_warning'] = true; // If [cache_directory] is non-existant or not writable, and [cache_disable_warning] is false, an error image will be generated warning to either set the cache directory or disable the warning (to avoid people not knowing about the cache)
+$PHPTHUMB_CONFIG['cache_disable_warning'] = false; // If [cache_directory] is non-existant or not writable, and [cache_disable_warning] is false, an error image will be generated warning to either set the cache directory or disable the warning (to avoid people not knowing about the cache)
+
 $PHPTHUMB_CONFIG['cache_directory_depth'] = 4; // If this larger than zero, cache structure will be broken into a broad directory structure based on cache filename. For example "cache_src012345..." will be stored in "/0/01/012/0123/cache_src012345..." when (cache_directory_depth = 4)
 
 
 // * Cache culling: phpThumb can automatically limit the contents of the cache directory
 //   based on last-access date and/or number of files and/or total filesize.
 
-$PHPTHUMB_CONFIG['cache_maxage'] = null;            // never delete cached thumbnails based on last-access time
-//$PHPTHUMB_CONFIG['cache_maxage'] = 86400 * 30;        // delete cached thumbnails that haven't been accessed in more than [30 days] (value is maximum time since last access in seconds to avoid deletion)
+//$PHPTHUMB_CONFIG['cache_maxage'] = null;            // never delete cached thumbnails based on last-access time
+$PHPTHUMB_CONFIG['cache_maxage'] = 86400 * 30;        // delete cached thumbnails that haven't been accessed in more than [30 days] (value is maximum time since last access in seconds to avoid deletion)
 
 //$PHPTHUMB_CONFIG['cache_maxsize'] = null;           // never delete cached thumbnails based on byte size of cache directory
-$PHPTHUMB_CONFIG['cache_maxsize'] = 10 * 1024 * 1024; // delete least-recently-accessed cached thumbnails when more than [80MB] of cached files are present (value is maximum bytesize of all cached files)
+$PHPTHUMB_CONFIG['cache_maxsize'] = 10 * 1024 * 1024; // delete least-recently-accessed cached thumbnails when more than [10MB] of cached files are present (value is maximum bytesize of all cached files)
 
-$PHPTHUMB_CONFIG['cache_maxfiles'] = null;          // never delete cached thumbnails based on number of cached files
-//$PHPTHUMB_CONFIG['cache_maxfiles'] = 200;             // delete least-recently-accessed cached thumbnails when more than [200] cached files are present (value is maximum number of cached files to keep)
+//$PHPTHUMB_CONFIG['cache_maxfiles'] = null;          // never delete cached thumbnails based on number of cached files
+$PHPTHUMB_CONFIG['cache_maxfiles'] = 200;             // delete least-recently-accessed cached thumbnails when more than [200] cached files are present (value is maximum number of cached files to keep)
 
 
 // * Source image cache configuration
-$PHPTHUMB_CONFIG['cache_source_enabled']   = true;                               // if true, source images obtained via HTTP are cached to $PHPTHUMB_CONFIG['cache_source_directory']
+$PHPTHUMB_CONFIG['cache_source_enabled']   = false;                               // if true, source images obtained via HTTP are cached to $PHPTHUMB_CONFIG['cache_source_directory']
 $PHPTHUMB_CONFIG['cache_source_directory'] = dirname(__FILE__).'/cache/source/';  // set the cache directory for unprocessed source images
 
 // * cache source modification date configuration
@@ -77,8 +78,8 @@ $PHPTHUMB_CONFIG['cache_default_only_suffix'] = '';           // cached in norma
 //$PHPTHUMB_CONFIG['cache_default_only_suffix'] = '*_thumb';  // cache 'pic.jpg' becomes 'pic_thumb.jpg' (or 'pic_thumb.png' if PNG output is selected, etc)
 //$PHPTHUMB_CONFIG['cache_default_only_suffix'] = 'small-*';  // cache 'pic.jpg' becomes 'small-pic.jpg' (or 'small-pic.png' if PNG output is selected, etc)
 
-$PHPTHUMB_CONFIG['cache_prefix'] = 'phpThumb_cache_'.str_replace('www.', '', @$_SERVER['SERVER_NAME']);
-//$PHPTHUMB_CONFIG['cache_prefix'] = 'phpThumb_cache';                         // allow phpThumb to share 1 set of cached files even if accessed under different servername/domains on same server
+$PHPTHUMB_CONFIG['cache_prefix'] = 'phpThumb_cache_'.(isset($_SERVER['SERVER_NAME']) ? str_replace('www.', '', $_SERVER['SERVER_NAME']).'_' : ''); // keep cache file separate by domain
+//$PHPTHUMB_CONFIG['cache_prefix'] = 'phpThumb_cache';                                                                                             // allow phpThumb to share 1 set of cached files even if accessed under different servername/domains on same server
 
 $PHPTHUMB_CONFIG['cache_force_passthru'] = true;  // if true, cached image data will always be passed to browser; if false, HTTP redirect will be used instead
 
@@ -107,15 +108,15 @@ $PHPTHUMB_CONFIG['temp_directory'] = $PHPTHUMB_CONFIG['cache_directory'];  // se
 // As a general guideline, this number will be about 20% of your PHP memory
 // configuration, so 8M = 1,677,722; 16M = 3,355,443; 32M = 6,710,886; etc.
 if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=') && !defined('memory_get_usage') && !@ini_get('memory_limit')) {
-	// memory_get_usage() will only be defined if your PHP is compiled with the --enable-memory-limit configuration option.
-	$PHPTHUMB_CONFIG['max_source_pixels'] = 0;         // no memory limit
+    // memory_get_usage() will only be defined if your PHP is compiled with the --enable-memory-limit configuration option.
+    $PHPTHUMB_CONFIG['max_source_pixels'] = 0;         // no memory limit
 } else {
-	// calculate default max_source_pixels as 1/6 of memory limit configuration
-	$PHPTHUMB_CONFIG['max_source_pixels'] = round(max(intval(ini_get('memory_limit')), intval(get_cfg_var('memory_limit'))) * 1048576 / 6);
-	//$PHPTHUMB_CONFIG['max_source_pixels'] = 0;       // no memory limit
-	//$PHPTHUMB_CONFIG['max_source_pixels'] = 1920000; // allow 1600x1200 images (2Mpx), no larger (about 12MB memory required)
-	//$PHPTHUMB_CONFIG['max_source_pixels'] = 2795000; // 16MB memory limit
-	//$PHPTHUMB_CONFIG['max_source_pixels'] = 3871488; // allow 2272x1704 images (4Mpx), no larger (about 24MB memory required)
+    // calculate default max_source_pixels as 1/6 of memory limit configuration
+    $PHPTHUMB_CONFIG['max_source_pixels'] = round(max(intval(ini_get('memory_limit')), intval(get_cfg_var('memory_limit'))) * 1048576 / 6);
+    //$PHPTHUMB_CONFIG['max_source_pixels'] = 0;       // no memory limit
+    //$PHPTHUMB_CONFIG['max_source_pixels'] = 1920000; // allow 1600x1200 images (2Mpx), no larger (about 12MB memory required)
+    //$PHPTHUMB_CONFIG['max_source_pixels'] = 2795000; // 16MB memory limit
+    //$PHPTHUMB_CONFIG['max_source_pixels'] = 3871488; // allow 2272x1704 images (4Mpx), no larger (about 24MB memory required)
 }
 
 
@@ -123,13 +124,12 @@ if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=')
 $PHPTHUMB_CONFIG['prefer_imagemagick']        = true;  // If true, use ImageMagick to resize thumbnails if possible, since it is usually faster than GD functions; if false only use ImageMagick if PHP memory limit is too low.
 $PHPTHUMB_CONFIG['imagemagick_use_thumbnail'] = true;  // If true, use ImageMagick's "-thumbnail" resizing parameter (if available) which removes extra non-image metadata (profiles, EXIF info, etc) resulting in much smaller filesize; if false, use "-resize" paramter which retains this info
 if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-	// Windows: set absolute pathname
-	 $PHPTHUMB_CONFIG['imagemagick_path'] = 'C:/ImageMagick/bin/convert.exe';
-	//$PHPTHUMB_CONFIG['imagemagick_path'] = null;
+    // Windows: set absolute pathname
+    $PHPTHUMB_CONFIG['imagemagick_path'] = 'C:/ImageMagick/convert.exe';
 } else {
-	// *nix: set absolute pathname to "convert", or leave as null if "convert" is in the path (location detected with `which`)
-	//$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/local/bin/convert';
-	$PHPTHUMB_CONFIG['imagemagick_path'] = null;
+    // *nix: set absolute pathname to "convert", or leave as null if "convert" is in the path (location detected with `which`)
+    //$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/local/bin/convert';
+    $PHPTHUMB_CONFIG['imagemagick_path'] = '/Applications/MAMP/bin/ImageMagick/ImageMagick-6.8.7/bin/convert';
 }
 
 
@@ -191,19 +191,12 @@ $PHPTHUMB_CONFIG['mysql_database'] = '';
 
 
 // * Security configuration
-$PHPTHUMB_CONFIG['high_security_enabled']    = true;  // if enabled, requires 'high_security_password' set to at least 5 characters, and requires the use of phpThumbURL() function (at the bottom of phpThumb.config.php) to generate hashed URLs
-$PHPTHUMB_CONFIG['disable_debug']            = true;  // prevent phpThumb from displaying any information about your system. If true, phpThumbDebug and error messages will be disabled
+$PHPTHUMB_CONFIG['high_security_enabled']    = false;  // if enabled, requires 'high_security_password' set to be set and requires the use of phpThumbURL() function (at the bottom of phpThumb.config.php) to generate hashed URLs
+$PHPTHUMB_CONFIG['high_security_password']   = '';     // required if 'high_security_enabled' is true, and must be at complex (uppercase, lowercase, numbers, punctuation, etc -- punctuation is strongest, lowercase is weakest; see PasswordStrength() in phpThumb.php). You can use a password generator like http://silisoftware.com/tools/password-random.php to generate a strong password
+$PHPTHUMB_CONFIG['disable_debug']            = true;   // prevent phpThumb from displaying any information about your system. If true, phpThumbDebug and error messages will be disabled
 $PHPTHUMB_CONFIG['allow_src_above_docroot']  = false;  // if true, allow src to be anywhere in filesystem; if false (default) only allow src within document_root
 $PHPTHUMB_CONFIG['allow_src_above_phpthumb'] = true;   // if true (default), allow src to be anywhere in filesystem; if false only allow src within sub-directory of phpThumb installation
-$PHPTHUMB_CONFIG['allow_parameter_file']     = false;  // if true, allow use of 'file' parameter; if false (default) the 'file' parameter is disabled/ignored
-$PHPTHUMB_CONFIG['allow_parameter_goto']     = false;  // if true, allow use of 'goto' parameter; if false (default) the 'goto' parameter is disabled/ignored
 
-// required if 'high_security_enabled' is true, must be at least 5 characters long
-$PHPTHUMB_CONFIG['high_security_password']   = '';
-$passFile = dirname(__FILE__).'/../../../autothumb/highSecurityPassword.php';
-if (file_exists($passFile)) {
-    include_once $passFile;
-}
 
 // * HTTP UserAgent configuration
 //$PHPTHUMB_CONFIG['http_user_agent'] = '';                                                                                      // PHP default: none
@@ -224,7 +217,7 @@ $PHPTHUMB_CONFIG['http_follow_redirect']            = true; // if true (default)
 
 // * Speed optimizations configuration
 $PHPTHUMB_CONFIG['use_exif_thumbnail_for_speed'] = false; // If true, and EXIF thumbnail is available, and is larger or equal to output image dimensions, use EXIF thumbnail rather than actual source image for generating thumbnail. Benefit is only speed, avoiding resizing large image.
-$PHPTHUMB_CONFIG['allow_local_http_src']         = true; // If true, 'src' parameter can be "http://<thishostname>/path/image.ext" instead of just "/path/image.ext"; if false then display warning message to encourage more efficient local-filename calling.
+$PHPTHUMB_CONFIG['allow_local_http_src']         = false; // If true, 'src' parameter can be "http://<thishostname>/path/image.ext" instead of just "/path/image.ext"; if false then display warning message to encourage more efficient local-filename calling.
 
 // END USER CONFIGURATION SECTION
 
@@ -250,12 +243,12 @@ $PHPTHUMB_DEFAULTS_DISABLEGETPARAMS  = false; // if true, GETstring parameters w
 // example:
 //   require_once($_SERVER['DOCUMENT_ROOT'].'/phpThumb/phpThumb.config.php');
 //   echo '<img src="'.phpThumbURL('src=/images/pic.jpg&w=50').'">';
-/*
+
 function phpThumbURL($ParameterString) {
-	global $PHPTHUMB_CONFIG;
-	return str_replace(@$PHPTHUMB_CONFIG['document_root'], '', dirname(__FILE__)).DIRECTORY_SEPARATOR.'phpThumb.php?'.$ParameterString.'&hash='.md5($ParameterString.@$PHPTHUMB_CONFIG['high_security_password']);
+    global $PHPTHUMB_CONFIG;
+    return str_replace(@$PHPTHUMB_CONFIG['document_root'], '', dirname(__FILE__)).DIRECTORY_SEPARATOR.'phpThumb.php?'.$ParameterString.'&hash='.md5($ParameterString.@$PHPTHUMB_CONFIG['high_security_password']);
 }
-*/
+
 ///////////////////////////////////////////////////////////////////////////////
 
 ?>
