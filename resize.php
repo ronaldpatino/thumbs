@@ -167,9 +167,19 @@ class resize {
 
     private function crop($optimalWidth, $optimalHeight, $newWidth, $newHeight)
     {
+
         // *** Find center - this will be used for the crop
-        $cropStartX = ( $optimalWidth / 2) - ( $newWidth /2 );
-        $cropStartY = ( $optimalHeight/ 2) - ( $newHeight/2 );
+        if (($optimalHeight/$optimalWidth) >= 1){
+            $cropStartX = 0;
+            $cropStartY = 0;
+        }
+        else{
+            $cropStartX = ( $optimalWidth / 2) - ( $newWidth /2 );
+            $cropStartY = ( $optimalHeight/ 2) - ( $newHeight/2 );
+        }
+
+
+
 
         $crop = $this->imageResized;
         //imagedestroy($this->imageResized);
