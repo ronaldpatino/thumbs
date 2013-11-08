@@ -1,19 +1,22 @@
 <?php
 
 $sizes = array(
-    '714x341',
+    '714x341',//Imagen noticia principal portada
     '346x344',
-    '280x164',
     '400x400',
     '390x255',
     '295x154',
     '345x260',
-    '120x74',
-    '332x260',
+    '120x74', //Imagen pequena noticia de seccion
+    '332x260', //Imagen noticia grande de seccion
     '120x74',
     '170x124',
     '685x340',
-    '310x350'
+    '310x350',
+    '305x475',
+    '390x355',//Imagen Farandula
+    '280x164',//Imagen Pequena sociales
+    '440x290'//Imagen grande sociales
 );
 
 // ensure there was a thumb in the URL
@@ -54,7 +57,7 @@ if (!mkpath(dirname($thumb),true)) {
 }
 
 // write the file
-if (!$resizeObj->saveImage($thumb, 100) ) {
+if (!$resizeObj->saveImage('./'.$thumb, 100) ) {
     error('cannot save thumbnail');
 }
 
