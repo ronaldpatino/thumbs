@@ -2,21 +2,23 @@
 
 $sizes = array(
     '714x341',//Imagen noticia principal portada
-    '346x344',
-    '400x400',
-    '390x255',
-    '295x154',
-    '345x260',
+    '346x346',//Imagen caricatura pequena
+    '400x400',//Imagen caricatura grande, Carusel widget grande
+    '295x154',//Noticias de portada en pagina principal
+    '345x260',//Noticia principla de seccion
     '120x74', //Imagen pequena noticia de seccion
-    '332x260', //Imagen noticia grande de seccion
-    '120x74',
-    '170x124',
-    '685x340',
-    '310x350',
-    '305x475',
+    '332x260', //Imagen noticia grande de seccion, Noticia grande en seccion con lista de imgs
+    '120x74',//Noticia secundaria de seccion, noticia pequena en seccion con lista de imgs
+    '305x475',//Portada Impresa
     '390x355',//Imagen Farandula
-    '280x164',//Imagen Pequena sociales
-    '440x290'//Imagen grande sociales
+    '280x164',//Imagen Pequena sociales, Carrusel widget
+    '440x290',//Imagen grande sociales
+    '180x180',//Multimedia Pequeno
+    '230x164',//Multimedia Pequeno
+    '170x124',//Pagina listado de noticias de seccion
+    '685x340',//Imagen grande al ver detalle de noticia
+    '310x350',//Imagen de mas fotos en seccion
+    '390x255'
 );
 
 // ensure there was a thumb in the URL
