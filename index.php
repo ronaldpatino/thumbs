@@ -35,8 +35,8 @@ $thumb_array = explode('/',$thumb);
 $size =$thumb_array[0];
 array_shift($thumb_array);
 $image = '../'.implode('/',$thumb_array);
-list($width,$height) = explode('x',$size);
-
+list($width,$height,$page) = explode('x',$size);
+$size = $width.'x'.$height;
 // ensure the size is valid
 if (!in_array($size,$sizes)) {
     error('invalid size');
@@ -48,10 +48,26 @@ if (!file_exists($image)) {
     $thumb = $size.'/placeholder/elmercurionoticiascuencaecuador.png';
 }
 
+//Get the right resize method per page
+$resize_method = '';
+switch ($page)
+{
+    case 'S':
+        $resize_method = 'portrait';
+        break;
+    case 'P':
+        $resize_method = 'crop';
+        break;
+    default:
+        $resize_method = 'crop';
+        break;
+}
+
+
 // generate the thumbnail
 require('resize.php');
 $resizeObj = new resize($image);
-$resizeObj->resizeImage($width, $height, 'crop');
+$resizeObj->resizeImage($width, $height, $resize_method);
 
 // make the directory to put the image
 if (!mkpath(dirname($thumb),true)) {
