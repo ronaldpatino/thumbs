@@ -18,6 +18,7 @@ $sizes = array(
     '170x124',//Pagina listado de noticias de seccion
     '685x340',//Imagen grande al ver detalle de noticia
     '310x350',//Imagen de mas fotos en seccion
+    '220x400',//Portada impresa carrusel
     '390x255'
 );
 
