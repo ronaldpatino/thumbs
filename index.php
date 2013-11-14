@@ -59,6 +59,9 @@ switch ($page)
     case 'P':
         $resize_method = 'crop';
         break;
+    case 'E':
+        $resize_method = 'exact';
+        break;    
     default:
         $resize_method = 'crop';
         break;
