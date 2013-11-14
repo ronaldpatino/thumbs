@@ -9,7 +9,7 @@ $sizes = array(
     '120x74', //Imagen pequena noticia de seccion
     '332x260', //Imagen noticia grande de seccion, Noticia grande en seccion con lista de imgs
     '120x74',//Noticia secundaria de seccion, noticia pequena en seccion con lista de imgs
-    '305x475',//Portada Impresa
+    '305x520',//Portada Impresa
     '390x355',//Imagen Farandula
     '280x164',//Imagen Pequena sociales, Carrusel widget
     '440x290',//Imagen grande sociales
